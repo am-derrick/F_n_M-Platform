@@ -63,10 +63,13 @@
     new Chart(perCapitaContext, {
         type: 'line',
         data: {
-            label: 'GDP Per Capita (current US$)',
-            data: perCapitaValues,
-            borderColor: 'rgba(10, 233, 162, 1)',
-            fill: false
+            labels: perCapitaLabels,
+            datasets: [{
+                label: 'GDP Per Capita (current US$)',
+                data: perCapitaValues,
+                borderColor: 'rgba(10, 233, 162, 1)',
+                fill: false
+            }]
         }
     });
 </script>
