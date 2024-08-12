@@ -1,0 +1,17 @@
+body {
+    background-image: url(../img/green-bg.jpg);
+}
+
+.logo {
+    font-family: 'Moirai One', cursive;
+    font-weight: 500;
+}
+
+.logo a {
+    color: whitesmoke;
+}
+
+.logo a:hover,
+.logo a:active {
+    text-decoration: none;
+}
