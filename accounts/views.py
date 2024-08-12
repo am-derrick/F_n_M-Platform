@@ -3,7 +3,7 @@ from django.contrib.auth import login
 from .forms import SignUpForm
 from django.contrib.auth.views import LoginView, LogoutView
 
-def register(request):
+def signup(request):
     """sign up/register view"""
     if request.method == 'POST':
         form = SignUpForm(request.POST)
