@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from .forms import SignUpForm
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import login_required
 
 def signup(request):
     """sign up/register view"""
@@ -10,7 +11,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('analysis')
+            return redirect('home')
     else:
         form = SignUpForm()
     return render(request, 'accounts/signup.html',  {'form': form})
@@ -21,6 +22,7 @@ class CustomLoginView(LoginView):
 class CustomLogoutView(LogoutView):
     next_page = 'login'
 
-
-def analysis_view(request):
-    return render(request, 'analysis/analysis.html')
+@login_required
+def home(request):
+    """home view"""
+    return render(request, 'accounts/home.html')
