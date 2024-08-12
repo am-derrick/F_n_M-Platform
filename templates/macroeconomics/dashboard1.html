@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard 1{% endblock %}
+
+{% block content %}
+<h2>Dashboard 1: GDP, Population & GDP Per Capita</h2>
+<div class="row">
+    <div class="col-md-6">
+        <canvas id="gdpChart"></canvas>
+    </div>
+    <div class="col-md-6">
+        <canvas id="popChart"></canvas>
+    </div>
+    <div class="col-md-6">
+        <canvas id="perCapitaChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const gdpData = {{ gdp_data|safe }};
+    const popData = {{ pop_data|safe }};
+    const perCapitaData = {{ per_capita_data|safe }};
+
+    const gdpLabels = gdpData.map(data => data.date);
+    const gdpValues = gdpData.map(data => data.value);
+
+    const popLabels = popData.map(data => data.date);
+    const popValues = popData.map(data => data.value);
+
+    const perCapitaLabels = perCapitaData.map(data => data.date);
+    const perCapitaValues = perCapitaData.map(data => data.value);
+
+    const gdpContext = document.getElementById('gdpChart').getContext('2d');
+    new Chart(gdpContext, {
+        type: 'line',
+        data: {
+            labels: gdpLabels,
+            datasets: [{
+                label: 'GDP (current US$)',
+                data: gdpValues,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false
+            }]
+        }
+    });
+
+    const popContext = document.getElementById('popChart').getContext('2d');
+    new Chart(popContext, {
+        type: 'line',
+        data: {
+            labels: popLabels,
+            datasets: [{
+                label: 'Population',
+                data: popValues,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                fill: false
+            }]
+        }
+    });
+
+    const perCapitaContext = document.getElementById('perCapitaChart').getContext('2d');
+    new Chart(perCapitaContext, {
+        type: 'line',
+        data: {
+            label: 'GDP Per Capita (current US$)',
+            data: perCapitaData,
+            borderColor: 'rgba(10, 233, 162, 1)',
+            fill: false
+        }
+    });
+</script>
+{% endblock %}
