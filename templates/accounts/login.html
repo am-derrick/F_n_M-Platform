@@ -1,12 +1,28 @@
-{% extends 'base.html' %}
+{% extends 'accounts_base.html' %}
 
-{% block title %}Log in to The Analysis Platform{% endblock %}
+{% block title %}Log In{% endblock %}
 
 {% block content %}
-    <h2>Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Log In</h3>
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+                <div class="card footer text-muted text-center">
+                    Don't have an account yet? <a href="{% url 'signup' %}">Sign Up</a>
+                </div>
+            </div>
+            <div class="test-center py-2">
+                <small>
+                    <a href="#" class="text-muted">Forgot your password?</a>
+                </small>
+            </div>
+        </div>
+    </div>
 {% endblock %}

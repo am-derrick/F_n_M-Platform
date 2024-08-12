@@ -13,7 +13,7 @@ def signup(request):
             return redirect('analysis')
     else:
         form = SignUpForm()
-    return render(request, 'accounts/register.html',  {'form': form})
+    return render(request, 'accounts/signup.html',  {'form': form})
 
 class CustomLoginView(LoginView):
     template_name = 'accounts/login.html'
