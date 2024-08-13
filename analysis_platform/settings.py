@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
+    'macroeconomics',
+    'financials',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +128,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Redirect to the home page after login
 LOGIN_REDIRECT_URL = '/accounts/home/'
+
+# Custom user with full member access
+AUTH_USER_MODEL = 'macroeconomics.CustomUser'
