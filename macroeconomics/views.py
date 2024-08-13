@@ -3,8 +3,8 @@ import requests
 from django.shortcuts import render
 
 def home(request):
-    """Displays charts showing the first three macroeconomic
-    datapoints on GDP and population on the hoome page.
+    """Displays charts showing the macroeconomic
+    datapoints on GDP, population, GDP per capita, USD/KES exchange rate and inflation rates on the home page.
     More information about the World Bank API can be found here
     https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation
     """
@@ -14,6 +14,8 @@ def home(request):
         'pop_data': [],
         'per_capita_data': [],
         'exchange_rates': [],
+        'current_inflation': [],
+        'previous_inflation': [],
     }
 
     # Fetch GDP data from 2010
@@ -48,8 +50,21 @@ def home(request):
     usd_exchange_rates = usd_exchange_rates[['Date', 'Mean']].rename(columns={'Mean': 'Rate'})
     usd_exchange_rates = usd_exchange_rates.sort_values(by='Date') # sort date
 
-    # Convert to list of dictionaries
     exchange_rates_list = usd_exchange_rates.to_dict('records')
     context['exchange_rates'] = exchange_rates_list
+
+    # 2024 12-month inflation data: see static/csv_files/Inflation_Rates.csv
+    inflation_data = [
+        {'month': 'July', 'value': 4.31},
+        {'month': 'June', 'value': 6.22},
+        {'month': 'May', 'value': 5.10},
+        {'month': 'April', 'value': 5.00},
+        {'month': 'March', 'value': 5.70},
+        {'month': 'February', 'value': 6.31},
+        {'month': 'January', 'value': 6.85},
+    ]
+
+    context['current_inflation'] = inflation_data[0]['value']
+    context['previous_inflation'] = inflation_data[1]['value']
 
     return render(request, 'accounts/home.html', context)

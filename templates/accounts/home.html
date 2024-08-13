@@ -14,8 +14,8 @@
     </ul>
     <div class="tab-content" id="analysisTabsContent">
         <div class="tab-pane fade show active" id="macro" role="tabpanel" aria-labelledby="macro-tab">
-            <h3>Macroeconomic Analysis</h2>
-            <h4>Dashboard 1: GDP, Population & GDP Per Capita</h3>
+            <h3>Macroeconomic Analysis</h3>
+            <h4>Dashboard 1: GDP, Population & GDP Per Capita</h4>
             <div class="row">
                 <div class="col-md-6">
                     <canvas id="gdpChart"></canvas>
@@ -28,9 +28,18 @@
                 </div>
             </div>
 
-            <h4>Dashboard 2: USD/KES Exchange Rate</h3>
-            <div class="col-md-6">
-                <canvas id="exchangeRateChart"></canvas>
+            <h4>Dashboard 2: USD/KES Exchange Rate</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <canvas id="exchangeRateChart"></canvas>
+                </div>
+            </div>
+
+            <h4>Dashboard 3: Current Month vs Previous Month inflation</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <canvas id="inflationComparisonChart"></canvas>
+                </div>
             </div>
         </div>
         <div class="tab-pane fade" id="financial" role="tabpanel" aria-labelledby="financial-tab">
@@ -58,6 +67,9 @@
 
     const exchangeRateLabels = exchangeRateData.map(data => data.Date);
     const exchangeRateValues = exchangeRateData.map(data => data.Rate);
+
+    const currentInflation = {{ current_inflation }};
+    const previousInflation = {{ previous_inflation }};
 
     const gdpContext = document.getElementById('gdpChart').getContext('2d');
     new Chart(gdpContext, {
@@ -112,6 +124,39 @@
                 borderColor: 'rgba(255, 99, 132, 1)',
                 fill: false
             }]
+        }
+    });
+
+    const inflationComparisonContext = document.getElementById('inflationComparisonChart').getContext('2d');
+    new Chart(inflationComparisonContext, {
+        type: 'bar',
+        data: {
+            labels: ['Previous Month', 'Current Month'],
+            datasets: [{
+                label: 'Inflation Rate (%)',
+                data: [previousInflation, currentInflation],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
         }
     });
 </script>
