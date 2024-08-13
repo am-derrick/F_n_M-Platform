@@ -38,7 +38,7 @@ def home(request):
         context['per_capita_data'] = per_capita_data
 
     # Fetch USD/KES exchange from 2019 to date
-    exchange_rates_file = 'static/CBK_Indicative_Exchange_Rates.csv'
+    exchange_rates_file = 'static/csv_files/CBK_Indicative_Exchange_Rates.csv'
     exchange_rates_df = pd.read_csv(exchange_rates_file)
 
     usd_exchange_rates = exchange_rates_df[exchange_rates_df['Currency'] == 'US DOLLAR']
