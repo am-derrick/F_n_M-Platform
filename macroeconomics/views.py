@@ -1,3 +1,4 @@
+import pandas as pd
 import requests
 from django.shortcuts import render
 
@@ -12,6 +13,7 @@ def home(request):
         'gdp_data': [],
         'pop_data': [],
         'per_capita_data': [],
+        'exchange_rates': [],
     }
 
     # Fetch GDP data from 2010
@@ -34,5 +36,20 @@ def home(request):
     if per_capita_response.status_code == 200:
         per_capita_data = per_capita_response.json()[1]
         context['per_capita_data'] = per_capita_data
+
+    # Fetch USD/KES exchange from 2019 to date
+    exchange_rates_file = 'static/CBK_Indicative_Exchange_Rates.csv'
+    exchange_rates_df = pd.read_csv(exchange_rates_file)
+
+    usd_exchange_rates = exchange_rates_df[exchange_rates_df['Currency'] == 'US DOLLAR']
+    usd_exchange_rates['Date'] = pd.to_datetime(usd_exchange_rates['Date'], format='%d/%m/%Y')
+    usd_exchange_rates['Date'] = usd_exchange_rates['Date'].dt.strftime('%Y-%m-%d')
+
+    usd_exchange_rates = usd_exchange_rates[['Date', 'Mean']].rename(columns={'Mean': 'Rate'})
+    usd_exchange_rates = usd_exchange_rates.sort_values(by='Date') # sort date
+
+    # Convert to list of dictionaries
+    exchange_rates_list = usd_exchange_rates.to_dict('records')
+    context['exchange_rates'] = exchange_rates_list
 
     return render(request, 'accounts/home.html', context)
