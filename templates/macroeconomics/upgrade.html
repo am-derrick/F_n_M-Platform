@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Become a Full Member{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Restricted Content</h2>
+    <p>This content is only accessible to full members.</p>
+    <a href="{% url 'membership_upgrade' %}" class="btn btn-primary">Click here to become a full member</a>
+</div>
+{% endblock %}

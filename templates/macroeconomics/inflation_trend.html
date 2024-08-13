@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Inflation Trend{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Historical Inflation Trend</h2>
+    <canvas id="inflationTrendChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const inflationData = {{ inflation_data|safe }};
+
+    const labels = inflationData.map(data => `${data.month} ${data.year}`);
+    const inflationValues = inflationData.map(data => data.inflation);
+
+    const ctx = document.getElementById('inflationTrendChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '12-Month Inflation Rate (%)',
+                data: inflationValues,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false
+            }]
+        }
+    });
+</script>
+{% endblock %}
