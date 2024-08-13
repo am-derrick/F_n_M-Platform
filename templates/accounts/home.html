@@ -50,10 +50,6 @@
     const perCapitaLabels = perCapitaData.map(data => data.date);
     const perCapitaValues = perCapitaData.map(data => data.value);
 
-    console.log(gdpData);
-    console.log(popData);
-    console.log(perCapitaData);
-
     const gdpContext = document.getElementById('gdpChart').getContext('2d');
     new Chart(gdpContext, {
         type: 'line',

@@ -25,4 +25,4 @@ class CustomLogoutView(LogoutView):
 @login_required
 def home(request):
     """home view"""
-    return render(request, 'accounts/home.html')
+    return redirect('macroeconomics:home')

@@ -35,4 +35,4 @@ def home(request):
         per_capita_data = per_capita_response.json()[1]
         context['per_capita_data'] = per_capita_data
 
-    return render(request, 'home.html', context)
+    return render(request, 'accounts/home.html', context)
