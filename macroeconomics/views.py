@@ -1,6 +1,18 @@
 import pandas as pd
 import requests
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+
+# 2024 12-month inflation data: see static/csv_files/Inflation_Rates.csv
+inflation_data = [
+    {'month': 'July', 'value': 4.31},
+    {'month': 'June', 'value': 6.22},
+    {'month': 'May', 'value': 5.10},
+    {'month': 'April', 'value': 5.00},
+    {'month': 'March', 'value': 5.70},
+    {'month': 'February', 'value': 6.31},
+    {'month': 'January', 'value': 6.85},
+]
 
 def home(request):
     """Displays charts showing the macroeconomic
@@ -53,18 +65,23 @@ def home(request):
     exchange_rates_list = usd_exchange_rates.to_dict('records')
     context['exchange_rates'] = exchange_rates_list
 
-    # 2024 12-month inflation data: see static/csv_files/Inflation_Rates.csv
-    inflation_data = [
-        {'month': 'July', 'value': 4.31},
-        {'month': 'June', 'value': 6.22},
-        {'month': 'May', 'value': 5.10},
-        {'month': 'April', 'value': 5.00},
-        {'month': 'March', 'value': 5.70},
-        {'month': 'February', 'value': 6.31},
-        {'month': 'January', 'value': 6.85},
-    ]
-
     context['current_inflation'] = inflation_data[0]['value']
     context['previous_inflation'] = inflation_data[1]['value']
 
     return render(request, 'accounts/home.html', context)
+
+@login_required
+def inflation_trend(request):
+    """Displays dashboard for historical monthly inflation from January 2024 to date"""
+    if not request.user.is_full_member:
+        return redirect('upgrade')
+    
+    context = {
+        'inflation_data': inflation_data,
+    }
+
+    return render(request, 'macroeconomics/inflation_trend.html', context)
+
+def upgrade(request):
+    """page users are prompted to become full members"""
+    return render(request, 'macroeconomics/upgrade.html')
