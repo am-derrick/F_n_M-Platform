@@ -1,9 +1,9 @@
 import requests
 from django.shortcuts import render
 
-def dashboard1(request):
+def home(request):
     """Displays charts showing the first three macroeconomic
-    datapoints on GDP and population.
+    datapoints on GDP and population on the hoome page.
     More information about the World Bank API can be found here
     https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation
     """
@@ -35,4 +35,4 @@ def dashboard1(request):
         per_capita_data = per_capita_response.json()[1]
         context['per_capita_data'] = per_capita_data
 
-    return render(request, 'macroeconomics/dashboard1.html', context)
+    return render(request, 'home.html', context)
