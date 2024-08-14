@@ -6,6 +6,9 @@ charset-normalizer==3.3.2
 Django==5.1
 django-crispy-forms==2.3
 django-environ==0.11.2
+django-form-tags==2.1
+django-svg-templatetag==1.0.1
+django-widget-tweaks==1.5.0
 djangorestframework==3.15.2
 idna==3.7
 numpy==2.0.1
