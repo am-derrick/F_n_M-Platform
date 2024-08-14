@@ -26,6 +26,8 @@ def financial_analysis_1(request):
 def financial_analysis_2(request):
     """view for page 1 of the financial analysis tab showing SCOM data
     from June 1 2024 to date"""
+    if not request.user.is_full_member:
+        return redirect('macroeconomics:upgrade')
     context = {
         'SCOM_data': page2_data.to_dict('records')
     }
