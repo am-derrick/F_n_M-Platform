@@ -1,3 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
+class CustomUser(AbstractUser):
+    """user with full memner access"""
+    is_full_member = models.BooleanField(default=False)
