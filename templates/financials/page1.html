@@ -4,8 +4,25 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Safaricom Share Prices (July 2024 to Date)</h2>
-    <canvas id="safaricomChart"></canvas>
+    <ul class="nav nav-tabs" id="analysisTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="macro-tab" data-toggle="tab" href="{% url 'home' %}" role="tab" aria-controls="macro" aria-selected="false">Macroeconomic Analysis</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="financial-tab" data-toggle="tab" href="{% url 'financials:page1' %}" role="tab" aria-controls="financial" aria-selected="true">Financial Analysis</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="analysisTabsContent">
+        <div class="tab-pane fade show active" id="macro" role="tabpanel" aria-labelledby="macro-tab">
+            <h3>Financial Analysis</h3>
+            <h4>Safaricom Share Prices (July 2024 to Date)</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <canvas id="safaricomChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -14,7 +31,7 @@
 
     const labels = safaricomData.map(data => data.Date);
     const closePrices = safaricomData.map(data => data.Close);
-    
+
     const ctx = document.getElementById('safaricomChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',

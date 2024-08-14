@@ -6,10 +6,10 @@
 <div class="container mt-4">
     <ul class="nav nav-tabs" id="analysisTabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="macro-tab" data-toggle="tab" href="#macro" role="tab" aria-controls="macro" aria-selected="true">Macroeconomic Analysis</a>
+            <a class="nav-link active" id="macro-tab" data-toggle="tab" href="{% url 'home' %}" role="tab" aria-controls="macro" aria-selected="true">Macroeconomic Analysis</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="financial-tab" data-toggle="tab" href="#financial" role="tab" aria-controls="financial" aria-selected="false">Financial Analysis</a>
+            <a class="nav-link" id="financial-tab" data-toggle="tab" href="{% url 'financials:page1' %}" role="tab" aria-controls="financial" aria-selected="false">Financial Analysis</a>
         </li>
     </ul>
     <div class="tab-content" id="analysisTabsContent">
