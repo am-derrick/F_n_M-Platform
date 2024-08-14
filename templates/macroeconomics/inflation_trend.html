@@ -13,7 +13,7 @@
     const inflationData = {{ inflation_data|safe }};
 
     const labels = inflationData.map(data => `${data.month}`);
-    const inflationValues = inflationData.map(data => data.value);
+    const inflationValues = inflationData.map(data => data.value.reverse());
 
     const ctx = document.getElementById('inflationTrendChart').getContext('2d');
     new Chart(ctx, {

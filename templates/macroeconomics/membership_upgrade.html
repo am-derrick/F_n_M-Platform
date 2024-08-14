@@ -7,13 +7,38 @@
     <h2>Become a Full Member</h2>
     <p>Upgrade your membership to gain full access to all our features!</p>
     
-    <form method="post">
+    <form id="payment-form" method="POST" action="{% url 'create_checkout' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary">Upgrade Now</button>
+        <button type="submit" class="btn btn-primary">Upgrade to Full Membership</button>
     </form>
 
     <p class="mt-3">
         Already a full member? <a href="{% url 'macroeconomics:home' %}">Return to the dashboard.</a>
     </p>
 </div>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
+
+    document.getElementById('payment-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        fetch("{% url 'create_checkout' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+        }).then(function(response) {
+            return response.json();
+        }).then(function(sessionId) {
+            return stripe.redirectToCheckout({ sessionId: sessionId.id });
+        }).then(function(result) {
+            if (result.error) {
+                alert(result.error.message);
+            }
+        }).catch(function(error) {
+            console.error("Error:", error);
+        });
+    });
+</script>
 {% endblock %}

@@ -56,14 +56,14 @@
     const perCapitaData = {{ per_capita_data|safe }};
     const exchangeRateData = {{ exchange_rates|safe }};
 
-    const gdpLabels = gdpData.map(data => data.date);
-    const gdpValues = gdpData.map(data => data.value);
+    const gdpLabels = gdpData.map(data => data.date).reverse();
+    const gdpValues = gdpData.map(data => data.value).reverse();
 
-    const popLabels = popData.map(data => data.date);
-    const popValues = popData.map(data => data.value);
+    const popLabels = popData.map(data => data.date).reverse();
+    const popValues = popData.map(data => data.value).reverse();
 
-    const perCapitaLabels = perCapitaData.map(data => data.date);
-    const perCapitaValues = perCapitaData.map(data => data.value);
+    const perCapitaLabels = perCapitaData.map(data => data.date).reverse();
+    const perCapitaValues = perCapitaData.map(data => data.value).reverse();
 
     const exchangeRateLabels = exchangeRateData.map(data => data.Date);
     const exchangeRateValues = exchangeRateData.map(data => data.Rate);
