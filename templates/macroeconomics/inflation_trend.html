@@ -12,8 +12,8 @@
 <script>
     const inflationData = {{ inflation_data|safe }};
 
-    const labels = inflationData.map(data => `${data.month} ${data.year}`);
-    const inflationValues = inflationData.map(data => data.inflation);
+    const labels = inflationData.map(data => `${data.month}`);
+    const inflationValues = inflationData.map(data => data.value);
 
     const ctx = document.getElementById('inflationTrendChart').getContext('2d');
     new Chart(ctx, {
