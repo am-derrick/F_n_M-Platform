@@ -3,6 +3,10 @@ from django.contrib.auth import login
 from .forms import SignUpForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+
+# stripe settings
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def signup(request):
     """sign up/register view"""
@@ -26,3 +30,6 @@ class CustomLogoutView(LogoutView):
 def home(request):
     """home view"""
     return redirect('macroeconomics:home')
+
+@login_required
+def process_payment(request):
