@@ -2,7 +2,7 @@ import pandas as pd
 import requests
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser
+from accounts.models import CustomUser
 from django.contrib import messages
 
 # 2024 12-month inflation data: see static/csv_files/Inflation_Rates.csv
