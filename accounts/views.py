@@ -90,9 +90,11 @@ def stripe_webhook(request):
     except stripe.error.SignatureVerificationError as e:
         return HttpResponse(status=400)
     
+    # Handles the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
 
+        # Updates user to full_member
         user = CustomUser.objects.get(username=session["client_reference_id"])
         user.is_full_member = True
         user.save()
