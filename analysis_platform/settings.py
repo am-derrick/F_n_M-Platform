@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
