@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Safaricom Share Prices{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Safaricom Share Prices (July 2024 to Date)</h2>
+    <canvas id="safaricomChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const safaricomData = {{ safaricom_data|safe }};
+    const labels = safaricomData.map(data => data.Date);
+    const closePrices = safaricomData.map(data => data.Close);
+
+    const ctx = document.getElementById('safaricomChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Close Price (KES)',
+                data: closePrices,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false
+            }]
+        }
+    });
+</script>
+{% endblock %}
