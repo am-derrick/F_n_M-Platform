@@ -2,6 +2,8 @@ import pandas as pd
 import requests
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from .models import CustomUser
+from django.contrib import messages
 
 # 2024 12-month inflation data: see static/csv_files/Inflation_Rates.csv
 inflation_data = [
@@ -85,3 +87,20 @@ def inflation_trend(request):
 def upgrade(request):
     """page users are prompted to become full members"""
     return render(request, 'macroeconomics/upgrade.html')
+
+@login_required
+def membership_upgrade(request):
+    """processes upgrading users to full membership"""
+    user = request.user
+    if user.is_full_member:
+        messages.info(request, 'You are already a full member.')
+        return redirect('macroeconomics:home')
+    
+    if request.method == 'POST':
+        user.is_full_member = True
+        user.save()
+
+        messages.success(request, 'Congrats! You are now a full member.')
+        return redirect('macroeconomics:home')
+    
+    return render(request, 'macroeconomics/membership_upgrade.html')
