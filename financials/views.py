@@ -11,14 +11,22 @@ df = df.sort_values(by='Date')
 # Page 1 from July 2024 to Date
 page1_data = df[df['Date'] >= '2024-07-01']
 
+# Strip whitespace from column names
+page1_data.columns = page1_data.columns.str.strip()
+
+# Convert the 'Date' column to strings in 'YYYY-MM-DD' format
+page1_data['Date'] = page1_data['Date'].dt.strftime('%Y-%m-%d')
+
 # Page 2 from June 2024 to Date
 page2_data = df[df['Date'] >= '2024-06-01']
+page2_data.columns = page1_data.columns.str.strip()
+page2_data['Date'] = page2_data['Date'].dt.strftime('%Y-%m-%d')
 
 def financial_analysis_1(request):
     """view for page 1 of the financial analysis tab showing SCOM data
     from July 1 2024 to date"""
     context = {
-        'SCOM_data': page1_data.to_dict('records')
+        'safaricom_data': page1_data.to_dict('records')
     }
     return render(request, 'financials/page1.html', context)
 
@@ -29,6 +37,6 @@ def financial_analysis_2(request):
     if not request.user.is_full_member:
         return redirect('macroeconomics:upgrade')
     context = {
-        'SCOM_data': page2_data.to_dict('records')
+        'safaricom_data': page2_data.to_dict('records')
     }
     return render(request, 'financials/page2.html', context)

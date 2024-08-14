@@ -11,8 +11,16 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const safaricomData = {{ safaricom_data|safe }};
+
+    // Log the data to the console to inspect it
+    console.log("Safaricom Data:", safaricomData);
+
     const labels = safaricomData.map(data => data.Date);
     const closePrices = safaricomData.map(data => data.Close);
+
+    // Log labels and close prices to ensure they're correctly extracted
+    console.log("Labels (Dates):", labels);
+    console.log("Close Prices:", closePrices);
 
     const ctx = document.getElementById('safaricomChart').getContext('2d');
     new Chart(ctx, {
