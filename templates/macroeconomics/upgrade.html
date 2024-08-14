@@ -15,7 +15,7 @@
     const checkoutButton = document.getElementById('checkout-button');
 
     checkoutButton.addEventListener('click', function() {
-        fetch("{% url 'checkout_session' %}", {
+        fetch("{% url 'create_checkout' %}", {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',
