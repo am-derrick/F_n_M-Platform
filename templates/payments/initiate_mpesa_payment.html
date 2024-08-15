@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}MPESA Payment{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Upgrade to Full Membership</h2>
+    <p>Please Enter your card details.</p>
+    <p>Amount: KES 100</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="phone_number" class="form-label">Phone Number:</label>
+            <input type="text" id="phone-number" class="form-control" placeholder="Enter Phone Number" required>
+        </div>
+        <button id="submit-button" class="btn btn-primary mt-3" type="button">Pay</button>
+    </form>
+</div>
+{% endblock %}

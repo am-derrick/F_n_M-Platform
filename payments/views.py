@@ -8,6 +8,8 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from .utils import lipa_na_mpesa
+import json
 
 # stripe settings
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -87,3 +89,26 @@ def stripe_webhook(request):
         print(f"Payment succeeded for {user.username}")
 
     return JsonResponse({'status': 'success'})
+
+@login_required
+def initiate_mpesa_payment(request):
+    """initiates MPESA payment"""
+    if request.method == 'POST':
+        phone_number = request.POST.get('phone_number')
+        amount = 1000
+        account_ref = "Full Membership"
+        transaction_desc = "Payment for Full Membership"
+
+        response = lipa_na_mpesa(phone_number, amount, account_ref, transaction_desc)
+
+        if response.get('ResponseCode') == '0':
+            return JsonResponse({"message": "Success! Please complete the payment on your phone."})
+        else:
+            return JsonResponse({"message": "Payment initiation failed."})
+    return render(request, 'payments/initiate_mpesa_payment.html')
+
+@csrf_exempt
+def mpesa_callback(request):
+    data = json.loads(request.body.decode('utf-8'))
+    # Process the callback data here, e.g., update user membership
+    return JsonResponse({"status": "success"})
