@@ -108,7 +108,23 @@ def initiate_mpesa_payment(request):
     return render(request, 'payments/initiate_mpesa_payment.html')
 
 @csrf_exempt
-def mpesa_callback(request):
-    data = json.loads(request.body.decode('utf-8'))
-    # Process the callback data here, e.g., update user membership
-    return JsonResponse({"status": "success"})
+def mpesa_webhook(request):
+    """Listens for MPESA payment and updates user membership"""
+    if request.method == 'POST':
+        mpesa_data = json.loads(request.body)
+
+        # Extract relevant information
+        phone_number = mpesa_data.get("Body", {}).get("stkCallback", {}).get("CallbackMetadata", {}).get("Item", [{}])[4].get("Value")
+        result_code = mpesa_data.get("Body", {}).get("stkCallback", {}).get("ResultCode")
+
+        if result_code == 0:
+            user = request.user
+            user.is_full_member = True
+            user.save()
+
+            return JsonResponse({"status": "success", "message": "Membership upgraded."})
+        else:
+            return JsonResponse({"status": "error", "message": "Payment failed."})
+
+
+    return JsonResponse({"status": "error", "message": "Invalid request method."})
