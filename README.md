@@ -4,6 +4,12 @@
 
 ![The_Analysis_Platform](https://github.com/am-derrick/F_n_M-Platform/blob/main/static/img/The_Analysis_Platform.png)
 
+This Project is named `analysis_platform` and has for the start 4 apps:
+1. `accounts`: containing relevant signup, login and account views and a custom user model.
+2. `macroeconomics`: containing the views and relevant urls for the macroeconomic charts on GDP ,population, GDP per capita and inflation.
+3. `financials`: containing the views and relevant urls for the financial analysis charts on SCOM data.
+4. `paymets`: containing the business logic for payment integration with [Stripe](https://stripe.com) and mobile money.
+
 ## Demo
 
 
