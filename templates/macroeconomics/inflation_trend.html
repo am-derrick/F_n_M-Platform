@@ -5,6 +5,11 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Historical Inflation Trend</h2>
+    <div class="filter-buttons">
+        <button class="btn btn-secondary" onclick="filterChart('ytd')">YTD</button>
+        <button class="btn btn-secondary" onclick="filterChart('3M')">3M</button>
+        <button class="btn btn-secondary" onclick="filterChart('1M')">1M</button>
+    </div>
     <canvas id="inflationTrendChart"></canvas>
 </div>
 

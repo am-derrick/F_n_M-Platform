@@ -18,12 +18,27 @@
             <h4>Dashboard 1: GDP, Population & GDP Per Capita</h4>
             <div class="row">
                 <div class="col-md-6">
+                    <div class="filter-buttons">
+                        <button class="btn btn-secondary" onclick="filterChart('5Y')">5Y</button>
+                        <button class="btn btn-secondary" onclick="filterChart('10Y')">10Y</button>
+                        <button class="btn btn-secondary" onclick="filterChart('full')">Full Dataset</button>
+                    </div>
                     <canvas id="gdpChart"></canvas>
                 </div>
                 <div class="col-md-6">
+                    <div class="filter-buttons">
+                        <button class="btn btn-secondary" onclick="filterChart('5Y')">5Y</button>
+                        <button class="btn btn-secondary" onclick="filterChart('10Y')">10Y</button>
+                        <button class="btn btn-secondary" onclick="filterChart('full')">Full Dataset</button>
+                    </div>
                     <canvas id="popChart"></canvas>
                 </div>
                 <div class="col-md-6">
+                    <div class="filter-buttons">
+                        <button class="btn btn-secondary" onclick="filterChart('5Y')">5Y</button>
+                        <button class="btn btn-secondary" onclick="filterChart('10Y')">10Y</button>
+                        <button class="btn btn-secondary" onclick="filterChart('full')">Full Dataset</button>
+                    </div>
                     <canvas id="perCapitaChart"></canvas>
                 </div>
             </div>
@@ -31,6 +46,13 @@
             <h4>Dashboard 2: USD/KES Exchange Rate</h4>
             <div class="row">
                 <div class="col-md-6">
+                    <div class="filter-buttons">
+                        <button class="btn btn-secondary" onclick="filterChart('5Y')">5Y</button>
+                        <button class="btn btn-secondary" onclick="filterChart('2Y')">2Y</button>
+                        <button class="btn btn-secondary" onclick="filterChart('ytd')">YTD</button>
+                        <button class="btn btn-secondary" onclick="filterChart('3M')">3M</button>
+                        <button class="btn btn-secondary" onclick="filterChart('1M')">1M</button>
+                    </div>
                     <canvas id="exchangeRateChart"></canvas>
                 </div>
             </div>
@@ -91,6 +113,21 @@
             }]
         }
     });
+
+    function filterChart(period) {
+        let url = `/get_chart_data?period=${period}`
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                updateChart(data);
+            });
+    }
+
+    function updateChart(data) {
+        let chart = Chart.getChart("chartGDP");
+        chart.data.datasets[0].data = data;
+        chart.update();
+    }
 
     const popContext = document.getElementById('popChart').getContext('2d');
     new Chart(popContext, {

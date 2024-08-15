@@ -19,6 +19,11 @@
             <h4>Safaricom Share Prices (June 2024 to date)</h4>
             <div class="row">
                 <div class="col-md-6">
+                    <div class="filter-buttons">
+                        <button class="btn btn-secondary" onclick="filterChart('3M')">3M</button>
+                        <button class="btn btn-secondary" onclick="filterChart('1M')">1M</button>
+                        <button class="btn btn-secondary" onclick="filterChart('5D')">5D</button>
+                    </div>
                     <canvas id="safaricomChart"></canvas>
                     <div class="alert alert-warning mt-4" role="alert">
                         This content is only accessible to full members. <a href="{% url 'macroeconomics:upgrade' %}" class="btn btn-primary">Click here to become a full member.</a>
