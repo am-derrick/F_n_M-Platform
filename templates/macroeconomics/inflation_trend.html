@@ -8,6 +8,14 @@
     <canvas id="inflationTrendChart"></canvas>
 </div>
 
+{% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const inflationData = {{ inflation_data|safe }};

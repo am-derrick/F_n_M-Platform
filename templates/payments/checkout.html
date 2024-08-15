@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Upgrade to Full Membership</h2>
+    <p>Amount: $1.00</p>
+    <form id="payment-form">
+        <div class="mb-3">
+            <label for="cardholder-name" class="form-label">Cardholder Name</label>
+            <input type="text" id="cardholder-name" class="form-control" placeholder="Enter cardholder name" required>
+        </div>
+        <div id="card-element" class="form-control">
+            <!-- Stripe.js will insert the Card Element here -->
+        </div>
+        <div id="card-errors" role="alert"></div>
+        <button id="submit-button" class="btn btn-primary mt-3" type="button">Pay</button>
+    </form>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe("{{ stripe_public_key }}");
+    const elements = stripe.elements();
+    const cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+
+    const form = document.getElementById('payment-form');
+    const submitButton = document.getElementById('submit-button');
+    
+    submitButton.addEventListener('click', async function(event) {
+        event.preventDefault();
+
+        const {paymentMethod, error} = await stripe.createPaymentMethod({
+            type: 'card',
+            card: cardElement,
+            billing_details: {
+                name: document.getElementById('cardholder-name').value,
+            },
+        });
+
+        if (error) {
+            // Show error in #card-errors element
+            document.getElementById('card-errors').textContent = error.message;
+        } else {
+            // Submit the form
+            form.submit();  // Ensure `form` references the correct form element
+        }
+    });
+</script>
+{% endblock %}
