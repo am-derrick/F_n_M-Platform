@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import pandas as pd
-from django.http import JsonResponse
 
 file_path = 'static/csv_files/SCOMHistoricalPrices[June_to_Aug].csv'
 df = pd.read_csv(file_path)
