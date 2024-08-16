@@ -1,6 +1,7 @@
 # Financial & Macroeconomics Analysis Platform
 [![Python Version](https://img.shields.io/badge/python-3.11-brightgreen.svg)](https://python.org)
 [![Django Version](https://img.shields.io/badge/django-5.1-brightgreen.svg)](https://www.djangoproject.com/download/)
+[![Bootsrap Version](https://img.shields.io/badge/bootstrap-5.3-purple.svg)](https://getbootstrap.com/docs/5.3/)
 
 ![The_Analysis_Platform](https://github.com/am-derrick/F_n_M-Platform/blob/main/static/img/The_Analysis_Platform.png)
 
