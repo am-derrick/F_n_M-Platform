@@ -17,9 +17,9 @@
     <div class="row">
         <div class="col-md-6">
             <div class="filter-buttons">
-                <button class="btn btn-secondary" onclick="filterChart('ytd')">YTD</button>
-                <button class="btn btn-secondary" onclick="filterChart('3M')">3M</button>
-                <button class="btn btn-secondary" onclick="filterChart('1M')">1M</button>
+                <a href="?period=ytd" class="btn btn-secondary {% if selected_period == 'YTD' %}active{% endif %}">YTD</a>
+                <a href="?period=3M" class="btn btn-secondary {% if selected_period == '3M' %}active{% endif %}">3M</a>
+                <a href="?period=1M" class="btn btn-secondary {% if selected_period == '1M' %}active{% endif %}">1M</a>
             </div>
             <canvas id="inflationTrendChart"></canvas>
         </div>
@@ -38,7 +38,9 @@
 <script>
     const inflationData = {{ inflation_data|safe }};
 
-    const labels = inflationData.map(data => `${data.month}`);
+    const selectedPeriod = '{{ selected_period }}';  // Access the period from context
+
+    const labels = inflationData.map(data => `${data.month}`).reverse();
     const inflationValues = inflationData.map(data => data.value).reverse();
 
     const ctx = document.getElementById('inflationTrendChart').getContext('2d');
@@ -54,5 +56,23 @@
             }]
         }
     });
+
+    function filterChart(period) {
+        fetch(`/macroeconomics/inflation_trend/?period=${period}`)
+            .then(response => response.json())
+            .then(data => {
+                updateChart(data);
+            })
+            .catch(error => console.error('Error fetching filtered data:', error));
+    }
+
+    function updateChart(data) {
+        const labels = data.map(entry => entry.month);
+        const values = data.map(entry => entry.value);
+
+        inflationChart.data.labels = labels;
+        inflationChart.data.datasets[0].data = values;
+        inflationChart.update();
+    }
 </script>
 {% endblock %}

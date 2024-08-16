@@ -4,17 +4,23 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from accounts.models import CustomUser
 from django.contrib import messages
+import datetime
+import calendar
 
 # 2024 12-month inflation data: see static/csv_files/Inflation_Rates.csv
 inflation_data = [
-    {'month': 'July', 'value': 4.31},
-    {'month': 'June', 'value': 6.22},
-    {'month': 'May', 'value': 5.10},
-    {'month': 'April', 'value': 5.00},
-    {'month': 'March', 'value': 5.70},
-    {'month': 'February', 'value': 6.31},
-    {'month': 'January', 'value': 6.85},
+    {'month': 'July', 'value': 4.31, 'date': '2024-07-01'},
+    {'month': 'June', 'value': 6.22, 'date': '2024-06-01'},
+    {'month': 'May', 'value': 5.10, 'date': '2024-05-01'},
+    {'month': 'April', 'value': 5.00, 'date': '2024-04-01'},
+    {'month': 'March', 'value': 5.70, 'date': '2024-03-01'},
+    {'month': 'February', 'value': 6.31, 'date': '2024-02-01'},
+    {'month': 'January', 'value': 6.85, 'date': '2024-01-01'},
 ]
+
+inflation_df = pd.DataFrame(inflation_data)
+inflation_df['Month'] = pd.to_datetime(inflation_df['month'], format='%B')
+inflation_df['Month_Number'] = inflation_df['Month'].dt.month
 
 def home(request):
     """Displays charts showing the macroeconomic
@@ -72,16 +78,41 @@ def home(request):
 
     return render(request, 'accounts/home.html', context)
 
+def get_month_name(month_number):
+  """Returns the name of the month given its number."""
+  return calendar.month_name[month_number]
+
 @login_required
 def inflation_trend(request):
     """Displays dashboard for historical monthly inflation from January 2024 to date"""
     if not request.user.is_full_member:
         return redirect('upgrade')
     
-    context = {
-        'inflation_data': inflation_data,
-    }
+    # Get the filter period from the request, default is YTD
+    period = request.GET.get('period', 'YTD')
 
+    inflation_df = pd.DataFrame(inflation_data)
+    inflation_df['date'] = pd.to_datetime(inflation_df['date'])
+
+    # Determine the last available date which is in July
+    last_date = inflation_df['date'].max()
+
+    if period == '3M':
+        start_date = last_date - pd.DateOffset(months=3)
+        filtered_inflation_data = inflation_df[inflation_df['date'] >= start_date]
+    elif period == '1M':
+        start_date = last_date - pd.DateOffset(months=1)
+        filtered_inflation_data = inflation_df[inflation_df['date'] >= start_date]
+    else:  # YTD
+        start_of_year = pd.to_datetime(f'{last_date.year}-01-01')
+        filtered_inflation_data = inflation_df[inflation_df['date'] >= start_of_year]
+
+    filtered_inflation_data['date'] = filtered_inflation_data['date'].dt.strftime('%Y-%m-%d')
+
+    context = {
+        'inflation_data': filtered_inflation_data.to_dict('records'),
+        'selected_period': period
+    }
     return render(request, 'macroeconomics/inflation_trend.html', context)
 
 def upgrade(request):
