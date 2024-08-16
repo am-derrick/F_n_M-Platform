@@ -9,7 +9,7 @@ This Project is named `analysis_platform` and has for the start 4 apps:
 1. `accounts`: containing relevant signup, login and account views and a custom user model.
 2. `macroeconomics`: containing the views and relevant urls for the macroeconomic charts on GDP ,population, GDP per capita and inflation.
 3. `financials`: containing the views and relevant urls for the financial analysis charts on SCOM data.
-4. `paymets`: containing the business logic for payment integration with [Stripe](https://stripe.com) and mobile money (currently supporting only [MPESA](https://developer.safaricom.co.ke/)).
+4. `payments`: containing the business logic for payment integration with [Stripe](https://stripe.com) and mobile money (currently supporting only [MPESA](https://developer.safaricom.co.ke/)).
 
 ## Demo
 
