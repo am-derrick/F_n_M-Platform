@@ -26,8 +26,28 @@ page2_data['Date'] = page2_data['Date'].dt.strftime('%Y-%m-%d')
 def financial_analysis_1(request):
     """view for page 1 of the financial analysis tab showing SCOM data
     from July 1 2024 to date"""
+    # Get the filter period from the request, default is 2M
+    period = request.GET.get('period', '2M')
+
+    # Convert 'Date' back to datetime for filtering
+    page1_data['Date'] = pd.to_datetime(page1_data['Date'])
+
+    # Filter the data based on the selected period
+    if period == '2M':
+        filtered1_data = page1_data[page1_data['Date'] >= (pd.to_datetime('today') - pd.DateOffset(months=2))]
+    elif period == '5D':
+        end_date = pd.to_datetime('today')
+        start_date = end_date - pd.DateOffset(days=9)  # Offset to handle weekends and public holidays
+        filtered1_data = page1_data[(page1_data['Date'] >= start_date) & (page1_data['Date'] <= end_date)]
+    else:
+        filtered1_data = page1_data
+
+    # Convert 'Date' back to string for JSON serialization
+    filtered1_data['Date'] = filtered1_data['Date'].dt.strftime('%Y-%m-%d')
+
     context = {
-        'safaricom_data': page1_data.to_dict('records')
+        'safaricom_data': filtered1_data.to_dict('records'),
+        'selected_period': period
     }
     return render(request, 'financials/page1.html', context)
 
@@ -41,24 +61,23 @@ def financial_analysis_2(request):
     # Get the filter period from the request, default is 3M
     period = request.GET.get('period', '3M')
 
-    # Convert 'Date' back to datetime for filtering
     page2_data['Date'] = pd.to_datetime(page2_data['Date'])
 
-    # Filter the data based on the selected period
     if period == '3M':
-        filtered_data = page2_data[page2_data['Date'] >= (pd.to_datetime('today') - pd.DateOffset(months=3))]
+        filtered2_data = page2_data[page2_data['Date'] >= (pd.to_datetime('today') - pd.DateOffset(months=3))]
     elif period == '1M':
-        filtered_data = page2_data[page2_data['Date'] >= (pd.to_datetime('today') - pd.DateOffset(months=1))]
+        filtered2_data = page2_data[page2_data['Date'] >= (pd.to_datetime('today') - pd.DateOffset(months=1))]
     elif period == '5D':
-        filtered_data = page2_data[page2_data['Date'] >= (pd.to_datetime('today') - pd.DateOffset(days=5))]
+        end_date = pd.to_datetime('today')
+        start_date = end_date - pd.DateOffset(days=9)
+        filtered2_data = page2_data[(page2_data['Date'] >= start_date) & (page2_data['Date'] <= end_date)]
     else:
-        filtered_data = page2_data
+        filtered2_data = page2_data
 
-    # Convert 'Date' back to string for JSON serialization
-    filtered_data['Date'] = filtered_data['Date'].dt.strftime('%Y-%m-%d')
+    filtered2_data['Date'] = filtered2_data['Date'].dt.strftime('%Y-%m-%d')
 
     context = {
-        'safaricom_data': filtered_data.to_dict('records'),
+        'safaricom_data': filtered2_data.to_dict('records'),
         'selected_period': period
     }
     return render(request, 'financials/page2.html', context)
