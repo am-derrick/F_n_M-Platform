@@ -22,9 +22,9 @@
                     {% if user.is_authenticated %}
                         {% if user.is_full_member %}
                             <div class="filter-buttons">
-                                <button class="btn btn-secondary" onclick="filterChart('3M')">3M</button>
-                                <button class="btn btn-secondary" onclick="filterChart('1M')">1M</button>
-                                <button class="btn btn-secondary" onclick="filterChart('5D')">5D</button>
+                                <a href="?period=3M" class="btn btn-secondary {% if selected_period == '3M' %}active{% endif %}">3M</a>
+                                <a href="?period=1M" class="btn btn-secondary {% if selected_period == '1M' %}active{% endif %}">1M</a>
+                                <a href="?period=5D" class="btn btn-secondary {% if selected_period == '5D' %}active{% endif %}">5D</a>
                             </div>
                             <canvas id="safaricomChart"></canvas>
                         {% else %}
@@ -72,5 +72,24 @@
             }]
         }
     });
+
+    // Function to fetch and update the chart data based on the selected period
+    function filterChart(period) {
+        fetch(`/financials/page2/?period=${period}`)
+            .then(response => response.json())
+            .then(data => {
+                updateChart(data);
+            })
+            .catch(error => console.error('Error fetching filtered data:', error));
+    }
+
+    function updateChart(data) {
+        const labels = data.map(entry => entry.Date);
+        const closePrices = data.map(entry => entry.Close);
+
+        safaricomChart.data.labels = labels;
+        safaricomChart.data.datasets[0].data = closePrices;
+        safaricomChart.update();
+    }
 </script>
 {% endblock %}
