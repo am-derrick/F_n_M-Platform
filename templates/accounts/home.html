@@ -19,25 +19,23 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="filter-buttons">
-                        <button class="btn btn-secondary" onclick="filterChart('5Y')">5Y</button>
-                        <button class="btn btn-secondary" onclick="filterChart('10Y')">10Y</button>
-                        <button class="btn btn-secondary" onclick="filterChart('full')">Full Dataset</button>
+                        <a href="?gdp_period=5Y" class="btn btn-secondary {% if gdp_period == '5Y' %}active{% endif %}">5Y</a>
+                        <a href="?gdp_period=10Y" class="btn btn-secondary {% if gdp_period == '10Y' %}active{% endif %}">10Y</a>
+                        <a href="?gdp_period=full" class="btn btn-secondary {% if gdp_period == 'full' %}active{% endif %}">Full Dataset</a>
                     </div>
                     <canvas id="gdpChart"></canvas>
                 </div>
                 <div class="col-md-6">
-                    <div class="filter-buttons">
-                        <button class="btn btn-secondary" onclick="filterChart('5Y')">5Y</button>
-                        <button class="btn btn-secondary" onclick="filterChart('10Y')">10Y</button>
-                        <button class="btn btn-secondary" onclick="filterChart('full')">Full Dataset</button>
-                    </div>
+                    <a href="?pop_period=5Y" class="btn btn-secondary {% if pop_period == '5Y' %}active{% endif %}">5Y</a>
+                    <a href="?pop_period=10Y" class="btn btn-secondary {% if pop_period == '10Y' %}active{% endif %}">10Y</a>
+                    <a href="?pop_period=full" class="btn btn-secondary {% if pop_period == 'full' %}active{% endif %}">Full Dataset</a>                    
                     <canvas id="popChart"></canvas>
                 </div>
                 <div class="col-md-6">
                     <div class="filter-buttons">
-                        <button class="btn btn-secondary" onclick="filterChart('5Y')">5Y</button>
-                        <button class="btn btn-secondary" onclick="filterChart('10Y')">10Y</button>
-                        <button class="btn btn-secondary" onclick="filterChart('full')">Full Dataset</button>
+                        <a href="?per_capita_period=5Y" class="btn btn-secondary {% if per_capita_period == '5Y' %}active{% endif %}">5Y</a>
+                        <a href="?per_capita_period=10Y" class="btn btn-secondary {% if per_capita_period == '10Y' %}active{% endif %}">10Y</a>
+                        <a href="?per_capita_period=full" class="btn btn-secondary {% if per_capita_period == 'full' %}active{% endif %}">Full Dataset</a>
                     </div>
                     <canvas id="perCapitaChart"></canvas>
                 </div>
@@ -47,11 +45,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="filter-buttons">
-                        <button class="btn btn-secondary" onclick="filterChart('5Y')">5Y</button>
-                        <button class="btn btn-secondary" onclick="filterChart('2Y')">2Y</button>
-                        <button class="btn btn-secondary" onclick="filterChart('ytd')">YTD</button>
-                        <button class="btn btn-secondary" onclick="filterChart('3M')">3M</button>
-                        <button class="btn btn-secondary" onclick="filterChart('1M')">1M</button>
+                        <a href="?exchange_period=5Y" class="btn btn-secondary {% if exchange_period == '5Y' %}active{% endif %}">5Y</a>
+                        <a href="?exchange_period=2Y" class="btn btn-secondary {% if exchange_period == '2Y' %}active{% endif %}">2Y</a>
+                        <a href="?exchange_period=YTD" class="btn btn-secondary {% if exchange_period == 'YTD' %}active{% endif %}">YTD</a>
+                        <a href="?exchange_period=3M" class="btn btn-secondary {% if exchange_period == '3M' %}active{% endif %}">3M</a>
+                        <a href="?exchange_period=1M" class="btn btn-secondary {% if exchange_period == '1M' %}active{% endif %}">1M</a>
                     </div>
                     <canvas id="exchangeRateChart"></canvas>
                 </div>
@@ -80,6 +78,13 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    // Function to filter data for the charts
+    function filterChart(chartId, period) {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('period', period);
+        window.location.search = urlParams.toString();
+    }
+
     const gdpData = {{ gdp_data|safe }};
     const popData = {{ pop_data|safe }};
     const perCapitaData = {{ per_capita_data|safe }};
@@ -114,19 +119,23 @@
         }
     });
 
+    // Function to fetch and update the chart data based on the selected period
     function filterChart(period) {
-        let url = `/get_chart_data?period=${period}`
-        fetch(url)
+        fetch(`/macroeconomics/?period=${period}`)
             .then(response => response.json())
             .then(data => {
                 updateChart(data);
-            });
+            })
+            .catch(error => console.error('Error fetching filtered data:', error));
     }
 
     function updateChart(data) {
-        let chart = Chart.getChart("gdpChart");
-        chart.data.datasets[0].data = data;
-        chart.update();
+        const labels = data.map(entry => entry.Date);
+        const closePrices = data.map(entry => entry.Close);
+
+        safaricomChart.data.labels = labels;
+        safaricomChart.data.datasets[0].data = closePrices;
+        safaricomChart.update();
     }
 
     const popContext = document.getElementById('popChart').getContext('2d');
