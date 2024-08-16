@@ -7,10 +7,10 @@
 <div class="container mt-4">
     <ul class="nav nav-tabs" id="analysisTabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="macro-tab" data-toggle="tab" href="{% url 'home' %}" role="tab" aria-controls="macro" aria-selected="false">Macroeconomic Analysis</a>
+            <a class="nav-link" id="macro-tab" data-toggle="tab" href="{% url 'home' %}" role="tab" aria-controls="macro" aria-selected="false">Macroeconomic Analysis</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="financial-tab" data-toggle="tab" href="{% url 'financials:page1' %}" role="tab" aria-controls="financial" aria-selected="true">Financial Analysis</a>
+            <a class="nav-link active" id="financial-tab" data-toggle="tab" href="{% url 'financials:page1' %}" role="tab" aria-controls="financial" aria-selected="true">Financial Analysis</a>
         </li>
     </ul>
     <div class="tab-content" id="analysisTabsContent">
@@ -19,15 +19,24 @@
             <h4>Safaricom Share Prices (June 2024 to date)</h4>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="filter-buttons">
-                        <button class="btn btn-secondary" onclick="filterChart('3M')">3M</button>
-                        <button class="btn btn-secondary" onclick="filterChart('1M')">1M</button>
-                        <button class="btn btn-secondary" onclick="filterChart('5D')">5D</button>
-                    </div>
-                    <canvas id="safaricomChart"></canvas>
-                    <div class="alert alert-warning mt-4" role="alert">
-                        This content is only accessible to full members. <a href="{% url 'macroeconomics:upgrade' %}" class="btn btn-primary">Click here to become a full member.</a>
-                    </div>
+                    {% if user.is_authenticated %}
+                        {% if user.is_full_member %}
+                            <div class="filter-buttons">
+                                <button class="btn btn-secondary" onclick="filterChart('3M')">3M</button>
+                                <button class="btn btn-secondary" onclick="filterChart('1M')">1M</button>
+                                <button class="btn btn-secondary" onclick="filterChart('5D')">5D</button>
+                            </div>
+                            <canvas id="safaricomChart"></canvas>
+                        {% else %}
+                            <div class="alert alert-warning mt-4" role="alert">
+                                This content is only accessible to full members. <a href="{% url 'macroeconomics:upgrade' %}" class="btn btn-primary">Click here to become a full member.</a>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-warning mt-4" role="alert">
+                            You need to <a href="{% url 'login' %}">log in</a> to view this content.
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

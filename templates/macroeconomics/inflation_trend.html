@@ -4,13 +4,26 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Historical Inflation Trend</h2>
-    <div class="filter-buttons">
-        <button class="btn btn-secondary" onclick="filterChart('ytd')">YTD</button>
-        <button class="btn btn-secondary" onclick="filterChart('3M')">3M</button>
-        <button class="btn btn-secondary" onclick="filterChart('1M')">1M</button>
+    <ul class="nav nav-tabs" id="analysisTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="macro-tab" data-toggle="tab" href="{% url 'home' %}" role="tab" aria-controls="macro" aria-selected="true">Macroeconomic Analysis</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="financial-tab" data-toggle="tab" href="{% url 'financials:page1' %}" role="tab" aria-controls="financial" aria-selected="false">Financial Analysis</a>
+        </li>
+    </ul>
+    <h3>Macroeconomic Analysis</h3>
+    <h4>Historical Inflation Trend</h4>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="filter-buttons">
+                <button class="btn btn-secondary" onclick="filterChart('ytd')">YTD</button>
+                <button class="btn btn-secondary" onclick="filterChart('3M')">3M</button>
+                <button class="btn btn-secondary" onclick="filterChart('1M')">1M</button>
+            </div>
+            <canvas id="inflationTrendChart"></canvas>
+        </div>
     </div>
-    <canvas id="inflationTrendChart"></canvas>
 </div>
 
 {% if messages %}

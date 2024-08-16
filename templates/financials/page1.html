@@ -6,10 +6,10 @@
 <div class="container mt-4">
     <ul class="nav nav-tabs" id="analysisTabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="macro-tab" data-toggle="tab" href="{% url 'home' %}" role="tab" aria-controls="macro" aria-selected="false">Macroeconomic Analysis</a>
+            <a class="nav-link" id="macro-tab" data-toggle="tab" href="{% url 'home' %}" role="tab" aria-controls="macro" aria-selected="false">Macroeconomic Analysis</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="financial-tab" data-toggle="tab" href="{% url 'financials:page1' %}" role="tab" aria-controls="financial" aria-selected="true">Financial Analysis</a>
+            <a class="nav-link active" id="financial-tab" data-toggle="tab" href="{% url 'financials:page1' %}" role="tab" aria-controls="financial" aria-selected="true">Financial Analysis</a>
         </li>
     </ul>
     <div class="tab-content" id="analysisTabsContent">
@@ -23,6 +23,13 @@
                         <button class="btn btn-secondary" onclick="filterChart('5D')">5D</button>
                     </div>
                     <canvas id="safaricomChart"></canvas>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h5>Explore More: Safaricom Share Prices (June 2024 to date)</h5>
+                        <p>This content is only accessible to full members.</p>
+                        <a href="{% url 'financials:page2' %}" class="btn btn-primary">View SCOM Prices from June 2024</a>
+                    </div>
                 </div>
             </div>
         </div>
