@@ -30,10 +30,12 @@ pip install -r requirements.txt
 ```
 
 Setup the local configurations:
-The example involved assumes your environmental variables are saved in the ```.env.example``` file. Transfer them to a file named ```.env```. You'll need 3 keys;
-- `STRIPE_PUBLIC_KEY` - can be found on your Stripe Dashboard
-- `STRIPE_SECRET_KEY`- can be found on your Stripe Dashboard
-- `SECRET_KEY` - Djanago's production secret key
+The example involved assumes your environmental variables are saved in the ```.env.example``` file. Transfer them to a file named ```.env```. You'll need 5 keys;
+- `STRIPE_PUBLIC_KEY` - can be found on your Stripe Dashboard.
+- `STRIPE_SECRET_KEY`- can be found on your Stripe Dashboard.
+- `SECRET_KEY` - Djanago's production secret key.
+- `MPESA_SECRET_KEY` - can be found on your Safricom Developer Dashbaord when you create a new app.
+- `MPESA_CONSUMER_KEY` - can be found on your Safricom Developer Dashbaord.
 
 ```bash
 cp .env.example .env
