@@ -46,7 +46,8 @@ def financial_analysis_1(request):
 
     context = {
         'safaricom_data': filtered1_data.to_dict('records'),
-        'selected_period': period
+        'selected_period': period,
+        'is_full_member': request.user.is_authenticated and request.user.is_full_member,
     }
     return render(request, 'financials/page1.html', context)
 

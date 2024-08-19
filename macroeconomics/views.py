@@ -97,11 +97,18 @@ def home(request):
 
     return render(request, 'accounts/home.html', context)
 
+def upgrade(request):
+    """page users are prompted to become full members"""
+    if request.user.is_authenticated and request.user.is_full_member:
+        return redirect('macroeconomics:home')
+
+    return render(request, 'macroeconomics/upgrade.html')
+
 @login_required
 def inflation_trend(request):
     """Displays dashboard for historical monthly inflation from January 2024 to date"""
     if not request.user.is_full_member:
-        return redirect('upgrade')
+        return redirect('macroeconomics:upgrade')
     
     # Get the filter period from the request, default is YTD
     period = request.GET.get('period', 'YTD')
@@ -130,15 +137,21 @@ def inflation_trend(request):
     }
     return render(request, 'macroeconomics/inflation_trend.html', context)
 
-def upgrade(request):
-    """page users are prompted to become full members"""
-    return render(request, 'macroeconomics/upgrade.html')
-
 @login_required
 def membership_upgrade(request):
     """redirects to Stripe checkout for full membership upgrade"""
     if request.user.is_full_member:
         messages.info(request, 'You are already a full member.')
         return redirect('macroeconomics:home')
+
+    if request.method == 'POST':
+        payment_method = request.POST.get('payment_method')
+        if payment_method == 'stripe':
+            return redirect('payments:stripe_checkout')
+        elif payment_method == 'mpesa':
+            return redirect('payments:mpesa_checkout')
+        else:
+            messages.error(request, 'Invalid payment method selected.')
+            return redirect('macroeconomics:upgrade')
     
     return render(request, 'macroeconomics/membership_upgrade.html')

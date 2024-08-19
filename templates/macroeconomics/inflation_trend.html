@@ -16,12 +16,24 @@
     <h4>Historical Inflation Trend</h4>
     <div class="row">
         <div class="col-md-6">
-            <div class="filter-buttons">
-                <a href="?period=ytd" class="btn btn-secondary {% if selected_period == 'YTD' %}active{% endif %}">YTD</a>
-                <a href="?period=3M" class="btn btn-secondary {% if selected_period == '3M' %}active{% endif %}">3M</a>
-                <a href="?period=1M" class="btn btn-secondary {% if selected_period == '1M' %}active{% endif %}">1M</a>
-            </div>
-            <canvas id="inflationTrendChart"></canvas>
+            {% if user.is_authenticated %}
+                {% if user.is_full_member %}
+                    <div class="filter-buttons">
+                        <a href="?period=ytd" class="btn btn-secondary {% if selected_period == 'YTD' %}active{% endif %}">YTD</a>
+                        <a href="?period=3M" class="btn btn-secondary {% if selected_period == '3M' %}active{% endif %}">3M</a>
+                        <a href="?period=1M" class="btn btn-secondary {% if selected_period == '1M' %}active{% endif %}">1M</a>
+                    </div>
+                    <canvas id="inflationTrendChart"></canvas>
+                {% else %}
+                    <div class="alert alert-warning mt-4" role="alert">
+                        This content is only accessible to full members. <a href="{% url 'macroeconomics:upgrade' %}" class="btn btn-primary">Click here to become a full member.</a>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-warning mt-4" role="alert">
+                    You need to <a href="{% url 'login' %}">log in</a> to view this content.
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
