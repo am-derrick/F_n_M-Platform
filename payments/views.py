@@ -15,6 +15,11 @@ import json
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required
+def payment_selection(request):
+    """Renders the payment selection page"""
+    return render(request, 'payments/payment_selection.html')
+
+@login_required
 def create_checkout(request):
     """creates session on stripe payment checkout"""
     session = stripe.checkout.Session.create(

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Choose Payment Method{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Select Your Payment Method</h2>
+    <p>Please choose your preferred payment method:</p>
+    <div class="d-flex justify-content-around">
+        <form action="{% url 'checkout' %}" method="get">
+            <button type="submit" class="btn btn-primary">Pay with Stripe</button>
+        </form>
+        <form action="{% url 'initiate_mpesa_payment' %}" method="get">
+            <button type="submit" class="btn btn-success">Pay with MPESA</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

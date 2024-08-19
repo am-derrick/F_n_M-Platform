@@ -6,10 +6,18 @@
 <div class="container mt-4">
     <h2>Restricted Content</h2>
     <p>This content is only accessible to full members.</p>
-    <button id="checkout-button" class="btn btn-primary">Click here to become a full member.</button>
+    <button id="payment-selection-button" class="btn btn-primary">Click here to become a full member.</button>
 </div>
 
-<script src="https://js.stripe.com/v3/"></script>
+<script type="text/javascript">
+    const paymentSelectionButton = document.getElementById('payment-selection-button');
+
+    paymentSelectionButton.addEventListener('click', function() {
+        window.location.href = "{% url 'payment_selection' %}";
+    });
+</script>
+
+<!-- <script src="https://js.stripe.com/v3/"></script>
 <script type="text/javascript">
     const stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
     const checkoutButton = document.getElementById('checkout-button');
@@ -34,5 +42,5 @@
             console.error('Error:', error);
         });
     });
-</script>
+</script> -->
 {% endblock %}
