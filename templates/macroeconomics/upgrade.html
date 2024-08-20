@@ -13,7 +13,7 @@
     const paymentSelectionButton = document.getElementById('payment-selection-button');
 
     paymentSelectionButton.addEventListener('click', function() {
-        window.location.href = "{% url 'payment_selection' %}";
+        window.location.href = "{% url 'payments:payment_selection' %}";
     });
 </script>
 
@@ -23,7 +23,7 @@
     const checkoutButton = document.getElementById('checkout-button');
 
     checkoutButton.addEventListener('click', function() {
-        fetch("{% url 'create_checkout' %}", {
+        fetch("{% url 'payments:create_checkout' %}", {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',

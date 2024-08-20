@@ -1,6 +1,8 @@
 from django.urls import path
 from .views import payment_selection, create_checkout, payment_success, payment_cancelled, checkout, initiate_mpesa_payment
 
+app_name = 'payments'
+
 urlpatterns = [
     path('payment-selection/', payment_selection, name='payment_selection'),
     path('create_checkout/', create_checkout, name='create_checkout'),

@@ -21,24 +21,48 @@ def payment_selection(request):
 
 @login_required
 def create_checkout(request):
-    """creates session on stripe payment checkout"""
-    session = stripe.checkout.Session.create(
-        payment_method_types=['card'],
-        line_items=[{
-            'price_data': {
-                'currency': 'usd',
-                'product_data': {
-                    'name': 'Full Membership',
+    """creates session on stripe payment checkout
+    also checks if there's an existing stripe coupon code"""
+    coupon_code = request.POST.get('coupon_code', '').strip()
+
+    if coupon_code:
+        try:
+            # Verify the coupon using Stripe's API
+            coupon = stripe.Coupon.retrieve(coupon_code)
+            
+            if coupon and not coupon.get('valid', False):
+                messages.error(request, 'This coupon is invalid or has expired.')
+                return redirect('payments:payment_selection')
+
+            # Grant the user full membership
+            user = CustomUser.objects.get(username=request.user.username)
+            user.is_full_member = True
+            user.save()
+
+            messages.success(request, 'Coupon applied successfully! You are now a full member.')
+            return redirect('macroeconomics:inflation_trend')  # Redirect to paid content
+        except stripe.error.InvalidRequestError:
+            messages.error(request, 'Invalid coupon code.')
+            return redirect('payments:payment_selection')
+    else:
+        # No coupon entered, proceed to Stripe payment
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'usd',
+                    'product_data': {
+                        'name': 'Full Membership',
+                    },
+                    'unit_amount': 1000,
                 },
-                'unit_amount': 1000,
-            },
-            'quantity': 1
-        }],
-        mode='payment',
-        success_url=request.build_absolute_uri('/accounts/payment_success'),
-        cancel_url=request.build_absolute_uri('/accounts/payment_cancelled'),
-    )
-    return JsonResponse({'id': session.id})
+                'quantity': 1
+            }],
+            mode='payment',
+            success_url=request.build_absolute_uri('/accounts/payment_success'),
+            cancel_url=request.build_absolute_uri('/accounts/payment_cancelled'),
+        )
+        return JsonResponse({'id': session.id})
 
 @login_required
 def checkout(request):
@@ -99,7 +123,7 @@ def stripe_webhook(request):
 def initiate_mpesa_payment(request):
     """initiates MPESA payment"""
     if request.method == 'POST':
-        data = json.loads(request.body)
+        data = json.loads(request.body)  # Load the JSON data sent in the request
         phone_number = data.get('phone_number')
         amount = 1000
         account_ref = "Full Membership"
