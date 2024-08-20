@@ -24,7 +24,7 @@
     submitButton.addEventListener('click', function() {
         const phoneNumber = phoneNumberInput.value;
 
-        fetch("{% url 'initiate_mpesa_payment' %}", {
+        fetch("{% url 'payments:initiate_mpesa_payment' %}", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
