@@ -141,8 +141,8 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # MPESA payment settings
 MPESA_ENVIRONMENT = 'sandbox'  # or 'production'
-MPESA_CONSUMER_KEY = 'dvzQEtAfjrTdyLaYLvQRAbJkeqhFprfnUcPJ4GlheN020FSa' # os.getenv('MPESA_CONSUMER_KEY')
-MPESA_CONSUMER_SECRET = 'PLAywL7WMEveDkOanv6lCmWGSkzaL0yQ3bGp369J2v7Bv6OV2agqroeOOATNnKsJ%' # os.getenv('MPESA_CONSUMER_SECRET')
+MPESA_CONSUMER_KEY = os.getenv('MPESA_CONSUMER_KEY')
+MPESA_CONSUMER_SECRET = os.getenv('MPESA_CONSUMER_SECRET')
 MPESA_SHORTCODE = 'N/A'
 MPESA_PASSKEY = 'your_passkey'  # The passkey provided by Safaricom
 MPESA_CALLBACK_URL = 'your_callback_url'  # The URL Safaricom will use to send payment notifications
