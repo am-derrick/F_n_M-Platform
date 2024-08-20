@@ -5,7 +5,19 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Select Your Payment Method</h2>
-    <p>Please choose your preferred payment method:</p>
+    <p>Please choose your preferred payment method or use a coupon if you have one:</p>
+
+    <form id="coupon-form" method="post" action="{% url 'payments:create_checkout' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="coupon_code">Have a coupon?</label>
+            <input type="text" class="form-control" id="coupon_code" name="coupon_code" placeholder="Enter coupon code">
+        </div>
+        <button type="submit" class="btn btn-primary">Proceed to Use Coupon</button>
+    </form>
+
+    <hr>
+
     <div class="d-flex justify-content-around">
         <form action="{% url 'payments:checkout' %}" method="get">
             <button type="submit" class="btn btn-primary">Pay with Stripe</button>
@@ -14,16 +26,5 @@
             <button type="submit" class="btn btn-success">Pay with MPESA</button>
         </form>
     </div>
-    <form id="payment-form" method="post" action="{% url 'payments:create_checkout' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="coupon_code">Have a coupon?</label>
-            <input type="text" class="form-control" id="coupon_code" name="coupon_code" placeholder="Enter coupon code">
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Proceed to Payment</button>
-        </div>
-    </form>
 </div>
 {% endblock %}

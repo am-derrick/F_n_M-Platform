@@ -23,46 +23,32 @@ def payment_selection(request):
 def create_checkout(request):
     """creates session on stripe payment checkout
     also checks if there's an existing stripe coupon code"""
-    coupon_code = request.POST.get('coupon_code', '').strip()
 
-    if coupon_code:
-        try:
-            # Verify the coupon using Stripe's API
-            coupon = stripe.Coupon.retrieve(coupon_code)
-            
-            if coupon and not coupon.get('valid', False):
-                messages.error(request, 'This coupon is invalid or has expired.')
-                return redirect('payments:payment_selection')
+@login_required
+def create_checkout(request):
+    """Creates session on stripe payment checkout or grants access with a valid coupon"""
+    if request.method == 'POST':
+        coupon_code = request.POST.get('coupon_code')
 
-            # Grant the user full membership
+        if not coupon_code:
+            messages.error(request, "Please enter a coupon code.")
+            return redirect('payments:payment_selection')
+
+        # Manually check if the coupon is 'INTERVIEW20'
+        if coupon_code == 'INTERVIEW20':
+            # Update user to full_member
             user = CustomUser.objects.get(username=request.user.username)
             user.is_full_member = True
             user.save()
 
-            messages.success(request, 'Coupon applied successfully! You are now a full member.')
-            return redirect('macroeconomics:inflation_trend')  # Redirect to paid content
-        except stripe.error.InvalidRequestError:
-            messages.error(request, 'Invalid coupon code.')
+            messages.success(request, "Coupon applied successfully! You now have full membership access.")
+            return redirect('macroeconomics:inflation_trend')
+        else:
+            messages.error(request, "Invalid coupon code.")
             return redirect('payments:payment_selection')
-    else:
-        # No coupon entered, proceed to Stripe payment
-        session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[{
-                'price_data': {
-                    'currency': 'usd',
-                    'product_data': {
-                        'name': 'Full Membership',
-                    },
-                    'unit_amount': 1000,
-                },
-                'quantity': 1
-            }],
-            mode='payment',
-            success_url=request.build_absolute_uri('/accounts/payment_success'),
-            cancel_url=request.build_absolute_uri('/accounts/payment_cancelled'),
-        )
-        return JsonResponse({'id': session.id})
+
+    return render(request, 'payments/payment_selection.html')
+
 
 @login_required
 def checkout(request):
