@@ -16,4 +16,32 @@
         <button id="submit-button" class="btn btn-primary mt-3" type="button">Pay</button>
     </form>
 </div>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+    const submitButton = document.getElementById('submit-button');
+    const phoneNumberInput = document.getElementById('phone-number');
+
+    submitButton.addEventListener('click', function() {
+        const phoneNumber = phoneNumberInput.value;
+
+        fetch("{% url 'initiate_mpesa_payment' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({
+                phone_number: phoneNumber
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+</script>
 {% endblock %}

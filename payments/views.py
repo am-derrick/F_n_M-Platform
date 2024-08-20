@@ -99,7 +99,8 @@ def stripe_webhook(request):
 def initiate_mpesa_payment(request):
     """initiates MPESA payment"""
     if request.method == 'POST':
-        phone_number = request.POST.get('phone_number')
+        data = json.loads(request.body)
+        phone_number = data.get('phone_number')
         amount = 1000
         account_ref = "Full Membership"
         transaction_desc = "Payment for Full Membership"
