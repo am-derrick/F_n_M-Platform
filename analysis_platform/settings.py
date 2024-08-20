@@ -145,8 +145,4 @@ MPESA_CONSUMER_KEY = os.getenv('MPESA_CONSUMER_KEY')
 MPESA_CONSUMER_SECRET = os.getenv('MPESA_CONSUMER_SECRET')
 MPESA_SHORTCODE = 'N/A'
 MPESA_PASSKEY = 'your_passkey'  # The passkey provided by Safaricom
-MPESA_CALLBACK_URL = 'your_callback_url'  # The URL Safaricom will use to send payment notifications
-
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Database-backed sessions
-
-SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
+MPESA_CALLBACK_URL = 'https://analysis-platform-5pdz9.ondigitalocean.app/payments/mpesa_webhook/'
