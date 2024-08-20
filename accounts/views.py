@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from .forms import SignUpForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 def signup(request):
     """sign up/register view"""
@@ -19,8 +21,9 @@ def signup(request):
 class CustomLoginView(LoginView):
     template_name = 'accounts/login.html'
 
-class CustomLogoutView(LogoutView):
-    next_page = 'login'
+def custom_logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('login'))
 
 @login_required
 def home(request):

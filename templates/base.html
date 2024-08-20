@@ -36,6 +36,17 @@
         .navbar {
             margin-bottom: 20px;
         }
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+        }
+        .nav-item.username {
+            margin-right: auto;
+            text-align: center;
+        }
+        .nav-item.logout {
+            margin-left: auto;
+        }
 
         .footer {
             background-color: #343a40;
@@ -57,7 +68,7 @@
         }
 
         .breadcrumb {
-            background-color: #ffffff; /* White background for breadcrumbs */
+            background-color: #ffffff;
             border-radius: 0.25rem;
             padding: 10px 15px;
             margin-bottom: 20px;
@@ -75,45 +86,31 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainMenu">
-                {% if user.is_authenticated %}
-                    <ul class="navbar-nav ml-auto">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" id="userMenu" role="button"
-                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ user.username }}
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">My Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
-                                <div class="dropdown-divider"></div>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
-                            </ul>
-                        </div>
-                    </ul>
-                {% else %}
-                    <form class="form-inline ml-auto">
-                        <a href="{% url 'login' %}" class="btn btn-outline-secondary">Log In</a>
-                        <a href="{% url 'signup' %}" class="btn btn-secondary ml-2">Sign Up</a>
-                    </form>
-                {% endif %}
-                {% if messages %}
-                    <div class="messages">
-                        {% for message in messages %}
-                        <div class="alert {{ message.tags }}">{{ message }}</div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
+                <ul class="navbar-nav mr-auto">
+                    <!-- Add additional nav items here -->
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="navbar-text text-light mr-3">Welcome {{ user.username }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </nav>
 
     <div class="container">
-        
-        {% block breadcrumb %}
-        <!-- Example: <li class="breadcrumb-item"><a href="#">Home</a></li> -->
-        {% endblock %}
-
         {% block content %}
         <!-- Main content will be injected here -->
         {% endblock %}

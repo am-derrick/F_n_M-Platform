@@ -150,6 +150,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Redirect to the home page after login
 LOGIN_REDIRECT_URL = '/accounts/home/'
 
+# logout redirect
+LOGOUT_REDIRECT_URL = '/login/'
+
 # Custom user with full member access
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
