@@ -13,7 +13,9 @@ This Project is named `analysis_platform` and has for the start 4 apps:
 
 ## Demo
 
+You can view the demo [here](https://youtu.be/2arRWqn2GeM).
 
+View the deployed site on Digital Ocean [here](https://analysis-platform-5pdz9.ondigitalocean.app/accounts/login/).
 
 ## Running the Project Locally
 
